@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Калькулятор семейного бюджета: доходы, расходы, остаток и рекомендации. Автосохранение и история расчётов." />
+  <title>Калькулятор семейного бюджета</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="./assets/css/styles.css" />
+</head>
+<body>
+  <a class="skip-link" href="#calculator">Перейти к калькулятору</a>
+
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand" aria-label="Название проекта">
+        <span class="brand__mark" aria-hidden="true">₽</span>
+        <span class="brand__text">Семейный бюджет</span>
+      </div>
+
+      <nav class="nav" aria-label="Навигация">
+        <a class="nav__link" href="#features">Возможности</a>
+        <a class="nav__link" href="#calculator">Калькулятор</a>
+        <a class="nav__link" href="#faq">FAQ</a>
+      </nav>
+
+      <div class="topbar__actions">
+        <button class="btn btn--ghost" type="button" id="exportBtn" title="Экспортировать данные">Экспорт</button>
+        <label class="btn btn--ghost file-btn" for="importFile" title="Импортировать данные">
+          Импорт
+          <input id="importFile" class="visually-hidden" type="file" accept="application/json" />
+        </label>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <p class="badge">Небольшой лендинг + удобный калькулятор</p>
+          <h1 class="hero__title">Посчитайте бюджет семьи за минуту</h1>
+          <p class="hero__subtitle">
+            Введите доходы и расходы — получите остаток, процент расходов и простую рекомендацию.
+            Данные сохраняются в браузере, есть история последних расчётов.
+          </p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#calculator">Открыть калькулятор</a>
+            <button class="btn btn--secondary" type="button" id="fillDemoBtn">Заполнить пример</button>
+          </div>
+
+          <div class="hero__meta">
+            <div class="meta-card">
+              <div class="meta-card__value" id="metaAutosave">Вкл</div>
+              <div class="meta-card__label">Автосохранение</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-card__value" id="metaHistoryCount">0</div>
+              <div class="meta-card__label">Записей в истории</div>
+            </div>
+            <div class="meta-card">
+              <div class="meta-card__value" id="metaTheme">Светлая</div>
+              <div class="meta-card__label">Тема</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero__preview" aria-hidden="true">
+          <div class="preview-card">
+            <div class="preview-card__title">Пример результата</div>
+            <div class="preview-line"><span>Доход</span><strong>140 000 ₽</strong></div>
+            <div class="preview-line"><span>Расходы</span><strong>92 000 ₽</strong></div>
+            <div class="preview-line"><span>Остаток</span><strong class="good">48 000 ₽</strong></div>
+            <div class="preview-progress">
+              <div class="preview-progress__bar"><div class="preview-progress__fill" style="width: 66%"></div></div>
+              <div class="preview-progress__label">66% расходов от дохода</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="features">
+      <div class="container">
+        <h2 class="section__title">Что умеет сайт</h2>
+        <div class="feature-grid">
+          <article class="feature">
+            <h3 class="feature__title">Расчёт бюджета</h3>
+            <p class="feature__text">Доходы, расходы, остаток и доля расходов в процентах.</p>
+          </article>
+          <article class="feature">
+            <h3 class="feature__title">Рекомендации</h3>
+            <p class="feature__text">Понятная подсказка по состоянию бюджета.</p>
+          </article>
+          <article class="feature">
+            <h3 class="feature__title">Автосохранение</h3>
+            <p class="feature__text">Поля сохраняются в браузере и восстанавливаются после перезагрузки.</p>
+          </article>
+          <article class="feature">
+            <h3 class="feature__title">История</h3>
+            <p class="feature__text">Хранит последние расчёты, чтобы сравнивать месяцы.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--calc" id="calculator">
+      <div class="container">
+        <div class="calc-header">
+          <div>
+            <h2 class="section__title">Калькулятор семейного бюджета</h2>
+            <p class="section__subtitle">Горячие клавиши: <kbd>Enter</kbd> — рассчитать, <kbd>Esc</kbd> — очистить.</p>
+          </div>
+          <div class="calc-header__actions">
+            <button class="btn btn--secondary" type="button" id="clearBtn">Очистить</button>
+            <button class="btn btn--primary" type="button" id="calcBtn">Рассчитать</button>
+          </div>
+        </div>
+
+        <div class="calculator">
+          <section class="card">
+            <h3 class="card__title">Введите данные</h3>
+
+            <div class="block">
+              <div class="block__title">Доходы семьи</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="income1">Зарплата 1</label>
+                  <input inputmode="decimal" type="number" id="income1" placeholder="Например: 80000" />
+                </div>
+                <div class="field">
+                  <label for="income2">Зарплата 2</label>
+                  <input inputmode="decimal" type="number" id="income2" placeholder="Например: 60000" />
+                </div>
+                <div class="field">
+                  <label for="extraIncome">Дополнительный доход</label>
+                  <input inputmode="decimal" type="number" id="extraIncome" placeholder="Подработка, премии" />
+                </div>
+                <div class="field">
+                  <label for="otherIncome">Прочие поступления</label>
+                  <input inputmode="decimal" type="number" id="otherIncome" placeholder="Подарки, возвраты" />
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
+              <div class="block__title">Обязательные расходы</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="rent">Жильё / аренда / ипотека</label>
+                  <input inputmode="decimal" type="number" id="rent" placeholder="Например: 35000" />
+                </div>
+                <div class="field">
+                  <label for="utilities">Коммунальные платежи</label>
+                  <input inputmode="decimal" type="number" id="utilities" placeholder="Свет, вода, отопление" />
+                </div>
+                <div class="field">
+                  <label for="food">Продукты</label>
+                  <input inputmode="decimal" type="number" id="food" placeholder="Еда на месяц" />
+                </div>
+                <div class="field">
+                  <label for="transport">Транспорт</label>
+                  <input inputmode="decimal" type="number" id="transport" placeholder="Бензин, проезд" />
+                </div>
+                <div class="field">
+                  <label for="credits">Кредиты</label>
+                  <input inputmode="decimal" type="number" id="credits" placeholder="Платежи по кредитам" />
+                </div>
+                <div class="field">
+                  <label for="children">Дети / школа / сад</label>
+                  <input inputmode="decimal" type="number" id="children" placeholder="Кружки, обучение" />
+                </div>
+              </div>
+            </div>
+
+            <div class="block">
+              <div class="block__title">Дополнительные расходы</div>
+              <div class="grid">
+                <div class="field">
+                  <label for="health">Здоровье</label>
+                  <input inputmode="decimal" type="number" id="health" placeholder="Аптека, врачи" />
+                </div>
+                <div class="field">
+                  <label for="clothes">Одежда</label>
+                  <input inputmode="decimal" type="number" id="clothes" placeholder="Покупки одежды" />
+                </div>
+                <div class="field">
+                  <label for="entertainment">Развлечения</label>
+                  <input inputmode="decimal" type="number" id="entertainment" placeholder="Кафе, кино, отдых" />
+                </div>
+                <div class="field">
+                  <label for="beauty">Красота / уход</label>
+                  <input inputmode="decimal" type="number" id="beauty" placeholder="Салоны, косметика" />
+                </div>
+                <div class="field">
+                  <label for="savings">Накопления</label>
+                  <input inputmode="decimal" type="number" id="savings" placeholder="Сбережения" />
+                </div>
+                <div class="field">
+                  <label for="otherExpenses">Прочие расходы</label>
+                  <input inputmode="decimal" type="number" id="otherExpenses" placeholder="Разное" />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <aside class="card">
+            <h3 class="card__title">Результат</h3>
+
+            <div class="result">
+              <div class="result-box">
+                <span>Общий доход</span>
+                <strong id="totalIncome">0 ₽</strong>
+              </div>
+              <div class="result-box">
+                <span>Общие расходы</span>
+                <strong id="totalExpenses">0 ₽</strong>
+              </div>
+              <div class="result-box">
+                <span>Остаток</span>
+                <strong id="balance">0 ₽</strong>
+              </div>
+              <div class="result-box">
+                <span>Расходы от дохода</span>
+                <strong id="expensePercent">0%</strong>
+              </div>
+            </div>
+
+            <div class="progress-wrapper">
+              <div class="progress-title">Заполненность бюджета расходами</div>
+              <div class="progress" aria-label="Прогресс расходов">
+                <div class="progress-fill" id="progressFill"></div>
+              </div>
+            </div>
+
+            <div class="recommendation" id="recommendation">
+              Введите данные и нажмите «Рассчитать».
+            </div>
+
+            <div class="note">
+              Если расходы превышают 80% дохода, бюджет считается напряжённым.
+              Желательно оставлять хотя бы 10–20% дохода на резерв.
+            </div>
+
+            <div class="history">
+              <div class="history__header">
+                <div class="history__title">История</div>
+                <button class="btn btn--ghost btn--small" type="button" id="clearHistoryBtn">Очистить историю</button>
+              </div>
+              <ol class="history__list" id="historyList" aria-label="История расчётов"></ol>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="faq">
+      <div class="container">
+        <h2 class="section__title">FAQ</h2>
+        <div class="faq">
+          <details class="faq__item">
+            <summary class="faq__q">Где хранятся мои данные?</summary>
+            <div class="faq__a">В вашем браузере (localStorage). Можно выгрузить их в JSON через «Экспорт».</div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__q">Можно ли поделиться расчётом?</summary>
+            <div class="faq__a">Да: сделайте экспорт и отправьте JSON-файл. На другом компьютере используйте «Импорт».</div>
+          </details>
+          <details class="faq__item">
+            <summary class="faq__q">Почему проценты могут быть больше 100%?</summary>
+            <div class="faq__a">Если расходы превышают доход — это нормально для расчёта. В прогрессе шкала ограничена 100%.</div>
+          </details>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div>© <span id="year"></span> Семейный бюджет</div>
+      <div class="footer__right">
+        <button class="btn btn--ghost btn--small" type="button" id="resetStorageBtn" title="Удалить сохранённые данные">
+          Сбросить сохранение
+        </button>
+      </div>
+    </div>
+  </footer>
+
+  <button
+    type="button"
+    class="theme-toggle"
+    id="themeToggle"
+    aria-label="Включить розовую тему"
+    title="Включить розовую тему"
+  >
+    <span class="icon" aria-hidden="true" id="themeToggleIcon">🌸</span>
+  </button>
+
+  <script src="./assets/js/app.js" defer></script>
+</body>
+</html>

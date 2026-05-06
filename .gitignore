@@ -1,0 +1,16 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs
+*.log
+
+# Node / tooling (если появится)
+node_modules/
+.npm/
+.pnpm-store/
+
+# IDE
+.vscode/
+.idea/
